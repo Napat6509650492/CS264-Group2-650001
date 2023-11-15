@@ -7,8 +7,11 @@ import java.util.List;
 
 public interface AddDropRepository {
     List<AddDropFormModel> findByStudentID(String studentId);
-    List<AddDropFormModel> findAllForType(String type);
+    List<AddDropFormModel> findAllForState(int state);
     int deleteFormById(long id);
     AddDropFormModel findByid(long id);
+
+    int updateState(int state);
+
     int createForm(AddDropFormModel form) throws JsonProcessingException;
 }

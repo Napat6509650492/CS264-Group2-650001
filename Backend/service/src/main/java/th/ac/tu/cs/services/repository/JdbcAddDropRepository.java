@@ -23,29 +23,38 @@ public class JdbcAddDropRepository implements AddDropRepository {
     @Override
     public List<AddDropFormModel> findByStudentID(String studentId) {
         String sql = "SELECT * FROM adddropform WHERE studentId = ?";
-        List<AddDropFormModel> data = jdbcTemplate.query(sql,new Object[]{studentId},new AddDropFormRowMapper());
-        return data;
+        return jdbcTemplate.query(sql,new AddDropFormRowMapper(),studentId);
     }
 
     @Override
-    public List<AddDropFormModel> findAllForType(String type) {
-        return null;
+    public List<AddDropFormModel> findAllForState(int state) {
+        String sql = "SELECT * FROM adddropform WHERE state = ?";
+        return jdbcTemplate.query(sql,new AddDropFormRowMapper(),state);
     }
 
     @Override
     public int deleteFormById(long id) {
-        return 0;
+        String sql = "DELETE FROM addDropForm WHERE id = ?;";
+            return jdbcTemplate.update(sql,id);
     }
 
     @Override
     public AddDropFormModel findByid(long id) {
-        return null;
+        String sql = "SELECT * FROM addDropForm WHERE id = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql,new AddDropFormRowMapper(),id);
+        }catch (IllegalArgumentException e){
+            e.printStackTrace();
+            return null;
+        }
     }
-
+    @Override
+    public int updateState(int state){
+        return 1;
+    }
     @Override
     public int createForm(AddDropFormModel form){
-        form.setPhone("4545665");
-        form.setMobilePhone("87789879789");
+
         String sql = "INSERT INTO addDropForm (topic ,date, too, addordrop, title, studentFirstName, " +
                 "studentLastName, studentId, studentYear, studyField, advisor, addressNumber, moo, " +
                 "tumbol, amphur, province, postalCode, mobilePhone, phone, cause, subject , state,message) " +
@@ -76,10 +85,10 @@ public class JdbcAddDropRepository implements AddDropRepository {
                     1,
                     mapper.writeValueAsString(new MessageModel())
                     );
-            return 0;
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
             return 1;
+        } catch (JsonProcessingException e) {
+            System.out.println(e.getMessage());
+            return 0;
         }
     }
 }
@@ -111,9 +120,15 @@ class AddDropFormRowMapper implements RowMapper<AddDropFormModel> {
         form.setState(rs.getInt("state"));
         try {
             form.setSubject(mapper.readValue(rs.getString("subject"), SubjectModel.class));
+        } catch (Exception e) {
+            System.out.println("AddDropRowmapper Error");
+            form.setSubject(null);
+        }
+        try {
             form.setMessage(mapper.readValue(rs.getString("message"), MessageModel.class));
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            System.out.println("AddDropRowmapper Error");
+            form.setMessage(null);
         }
 
 

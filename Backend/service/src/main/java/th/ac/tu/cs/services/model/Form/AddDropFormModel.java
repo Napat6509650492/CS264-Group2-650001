@@ -30,7 +30,6 @@ public class AddDropFormModel {
     private String mobilePhone;
     private String phone;
     private String cause;
-    @JsonIgnore
     private SubjectModel subject;
     private int state;
     private MessageModel message;
