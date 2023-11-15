@@ -79,14 +79,14 @@ function submitf(){
          <form @submit.prevent="submitf">
             <div class="topic">
                   <div>
-                     <label for="เรื่อง" >เรื่อง</label>
-                     <input type="text" id="เรื่อง" name="เรื่อง" v-model="formdata.topic">
+                     <label for="เรื่อง" v-bind:class="{error:formdata.topic.length > 100 || /\d/.test(formdata.topic)}" class="required">เรื่อง</label>
+                     <input type="text"  id="เรื่อง" name="เรื่อง" v-model="formdata.topic" v-bind:class="{error:formdata.topic.length > 100 || /\d/.test(formdata.topic)}" placeholder="เรื่อง" required>
                   </div>
             </div>
             <div > 
                   <div >
-                     <label for="เรียน" >เรียน</label>
-                     <input type="text" id="เรียน" name="เรียน" v-model="formdata.to">
+                     <label for="เรียน" v-bind:class="{error:formdata.to.length > 100 || /\d/.test(formdata.to)}" class="required">เรียน</label>
+                     <input type="text" id="เรียน" name="เรียน" v-model="formdata.to" v-bind:class="{error:formdata.to.length > 100 || /\d/.test(formdata.to)}" placeholder="เรียน" required>
                   </div>
             </div>
             <p>ข้อมูลลส่วนตัว</p>
@@ -110,23 +110,23 @@ function submitf(){
             <div class="profile">
                   <div class="input-row">
                      <div>
-                           <label for="first_name" >ชื่อ</label>
-                           <input type="text" id="first_name" name="first_name" v-model="formdata.studentFirstName">
+                        <label for="first_name" v-bind:class="{error:formdata.studentFirstName.length > 50 || /\d/.test(formdata.studentFirstName)}" class="required">ชื่อ</label>
+                           <input type="text" id="first_name" name="first_name" v-model="formdata.studentFirstName" v-bind:class="{error:formdata.studentFirstName.length > 50 || /\d/.test(formdata.studentFirstName)}" placeholder="ชื่อ" required>
                      </div>
                      <div>
-                           <label for="last_name">นามสกุล</label>
-                           <input type="text" id="last_name" name="last_name" v-model="formdata.studentLastName">
+                        <label for="last_name" v-bind:class="{error:formdata.studentLastName.length > 50 || /\d/.test(formdata.studentLastName)}" class="required">นามสกุล</label>
+                           <input type="text" id="last_name" name="last_name" v-model="formdata.studentLastName" v-bind:class="{error:formdata.studentLastName.length > 50 || /\d/.test(formdata.studentLastName)}" placeholder="นามสกุล" required>
                      </div>
                   </div>
 
                   <div class="input-row">
                      <div>
-                        <label for="เลขทะเบียน" >เลขทะเบียน</label>
-                        <input type="text" id="เลขทะเบียน" name="เลขทะเบียน" v-model="formdata.studentId">
+                        <label for="เลขทะเบียน" v-bind:class="{error:formdata.studentId.length > 10}" class="required">เลขทะเบียน</label>
+                        <input type="text" id="เลขทะเบียน" name="เลขทะเบียน" v-model="formdata.studentId" v-bind:class="{error:formdata.studentId.length > 10}" pattern="[0-9]{10}" maxlength="10" minlength="10" placeholder="เลขทะเบียน" required>
                      </div>
 
                      <div>
-                        <label for="studentYear" >ชั้นปีที่</label>
+                        <label for="studentYear" class="required">ชั้นปีที่</label>
                         <select id="studentYear" name="studentYear" v-model="formdata.studentYear">
                            <option value="1">1</option>
                            <option value="2">2</option>
@@ -142,12 +142,12 @@ function submitf(){
 
                   <div class="input-row">
                      <div>
-                        <label for="สาขาวิชา" >สาขาวิชา</label>
-                        <input type="text" id="สาขาวิชา" name="สาขาวิชา" v-model="formdata.studyField">
+                        <label for="สาขาวิชา" v-bind:class="{error:formdata.studyField.length > 50 || /\d/.test(formdata.studyField)}" class="required">สาขาวิชา</label>
+                        <input type="text" id="สาขาวิชา" name="สาขาวิชา" v-model="formdata.studyField" v-bind:class="{error:formdata.studyField.length > 50 || /\d/.test(formdata.studyField)}" placeholder="สาขาวิชา" required>
                      </div>
                      <div>
-                        <label for="teacher" >อาจารย์ที่ปรึกษา</label>
-                        <input type="text" id="teacher" name="teacher" v-model="formdata.advisor">
+                        <label for="teacher" v-bind:class="{error:formdata.advisor.length > 100 || /\d/.test(formdata.advisor)}" class="required">อาจารย์ที่ปรึกษา</label>
+                        <input type="text" id="teacher" name="teacher" v-model="formdata.advisor" v-bind:class="{error:formdata.advisor.length > 100 || /\d/.test(formdata.advisor)}" placeholder="อาจารย์ที่ปรึกษา" required>
                      </div>
                   </div>
                </div>
@@ -156,40 +156,54 @@ function submitf(){
             <div class="address"> 
                   <div class="input-row">
                      <div>
-                        <label for="subjectn">บ้านเลขที่</label>
-                        <input type="text" id="house-number" name="house-number" placeholder="บ้านเลขที่" v-model="formdata.addressNumber">
+                        <label for="house-number" v-bind:class="{error:formdata.addressNumber.length > 10}" class="required">บ้านเลขที่</label>
+                        <input type="text" id="house-number" name="house-number" placeholder="บ้านเลขที่" v-model="formdata.addressNumber" v-bind:class="{error:formdata.addressNumber.length > 10}" pattern="[0-9]" required>
                      </div>
                      <div>
-                        <label for="subjectn">หมู่</label>
-                        <input type="text" id="village" name="village" placeholder="หมู่" v-model="formdata.moo">
+                        <label for="village" v-bind:class="{error:formdata.moo.length > 10}" class="required">หมู่</label>
+                        <input type="text" id="village" name="village" placeholder="หมู่" v-model="formdata.moo" v-bind:class="{error:formdata.moo.length > 10}" pattern="[0-9]" required>
                      </div>
                   </div>
 
                   <div class="input-row">
                      <div>
-                        <label for="subjectn">ตำบล/แขวง</label>
-                        <input type="text" id="sub-district" name="sub-district" placeholder="ตำบล/แขวง" v-model="formdata.tumbol">
+                        <label for="sub-district" v-bind:class="{error:formdata.tumbol.length > 30 || /\d/.test(formdata.advisor)}" class="required">ตำบล/แขวง</label>
+                        <input type="text" id="sub-district" name="sub-district" placeholder="ตำบล/แขวง" v-model="formdata.tumbol" v-bind:class="{error:formdata.tumbol.length > 30 || /\d/.test(formdata.advisor)}" required>
                      </div>
                      <div>
-                        <label for="subjectn">อำเภอ/เขต</label>
-                        <input type="text" id="district" name="district" placeholder="อำเภอ/เขต" v-model="formdata.amphur">
+                        <label for="district" v-bind:class="{error:formdata.amphur.length > 30 || /\d/.test(formdata.amphur)}" class="required">อำเภอ/เขต</label>
+                        <input type="text" id="district" name="district" placeholder="อำเภอ/เขต" v-model="formdata.amphur" v-bind:class="{error:formdata.amphur.length > 30 || /\d/.test(formdata.amphur)}" required>
                      </div>
                   </div>
 
                   <div class="input-row">
                      <div>
-                        <label for="subjectn">จังหวัด</label>
-                        <input type="text" id="province" name="province" placeholder="จังหวัด" v-model="formdata.province">
+                        <label for="province" v-bind:class="{error:formdata.province.length > 50 || /\d/.test(formdata.province)}" class="required">จังหวัด</label>
+                        <input type="text" id="province" name="province" placeholder="จังหวัด" v-model="formdata.province" v-bind:class="{error:formdata.province.length > 50 || /\d/.test(formdata.province)}" required>
                      </div>
                      <div>
-                        <label for="subjectn">รหัสไปรษณีย์</label>
-                        <input type="text" id="postal-code" name="postal-code" placeholder="รหัสไปรษณีย์" v-model="formdata.postalCode">
+                        <label for="postal-code" v-bind:class="{error:formdata.postalCode.length > 5}" class="required">รหัสไปรษณีย์</label>
+                        <input type="text" id="postal-code" name="postal-code" placeholder="รหัสไปรษณีย์" v-model="formdata.postalCode" v-bind:class="{error:formdata.postalCode.length > 5}" pattern="[0-9]{5}" maxlength="5" minlength="5" required>
                      </div>
                   </div>
+                  <div class="input-row">
+                     <div>
+                        <label for="mobilePhone" v-bind:class="{error:formdata.mobilePhone.length > 10}" class="required">เบอร์โทรศัพท์</label>
+                        <input type="text" id="mobilePhone" name="mobilePhone" placeholder="เบอร์โทรศัพท์" v-model="formdata.mobilePhone" v-bind:class="{error:formdata.mobilePhone.length > 10}" pattern="[0-9]" maxlength="10" minlength="9" required>
+                     </div>
+                     <div>
+                        <label for="phone" v-bind:class="{error:formdata.phone.length > 10}" class="required">เบอร์โทรศัพท์บ้าน</label>
+                        <input type="text" id="phone" name="phone" placeholder="เบอร์โทรศัพท์บ้าน" v-model="formdata.phone" v-bind:class="{error:formdata.phone.length > 10 }" pattern="[0-9]" maxlength="10" minlength="9" required>
+                     </div>
+                  </div>
+            
+            
+            
+            
             </div>
             
             <div ></div>
-            <p >ประสงค์ขอ</p>
+            <p class="required">ประสงค์ขอ</p>
                      <div>
                            <div>
                               <div>
@@ -203,11 +217,11 @@ function submitf(){
                            </div>
                      </div>
             <div class="reason">
-                  <label for="reason" >เหตุผล</label>
+                  <label for="reason" class="required">เหตุผล</label>
                   <textarea id="reason" name="reason"  rows="2" cols="25" v-model="formdata.cause"></textarea>
             </div>
       
-            <p>แนบเอกสาร</p>
+            <p class="required">แนบเอกสาร</p>
 
                <label for="file-upload" class="custom-file-upload">Upload Files</label>
 
@@ -442,4 +456,11 @@ function submitf(){
       margin-left: 11px;
    }
 }
+   .error {
+      color: red;
+   }
+   .required::after {
+      content: "*";
+      color: red;
+    }
 </style>
