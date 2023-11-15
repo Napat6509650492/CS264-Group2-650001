@@ -48,8 +48,8 @@ public class JdbcAddDropRepository implements AddDropRepository {
         form.setMobilePhone("87789879789");
         String sql = "INSERT INTO addDropForm (topic ,date, too, addordrop, title, studentFirstName, " +
                 "studentLastName, studentId, studentYear, studyField, advisor, addressNumber, moo, " +
-                "tumbol, amphur, province, postalCode, mobilePhone, phone, cause, subject , state) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "tumbol, amphur, province, postalCode, mobilePhone, phone, cause, subject , state,message) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
         try {
             jdbcTemplate.update(sql,
                     form.getTopic(),
@@ -73,7 +73,8 @@ public class JdbcAddDropRepository implements AddDropRepository {
                     form.getPhone(),
                     form.getCause(),
                     mapper.writeValueAsString(form.getSubject()),
-                    1
+                    1,
+                    mapper.writeValueAsString(new MessageModel())
                     );
             return 0;
         } catch (JsonProcessingException e) {
