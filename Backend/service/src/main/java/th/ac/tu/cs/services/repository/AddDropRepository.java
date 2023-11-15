@@ -10,8 +10,7 @@ public interface AddDropRepository {
     List<AddDropFormModel> findAllForState(int state);
     int deleteFormById(long id);
     AddDropFormModel findByid(long id);
-
-    int updateState(int state);
+    int updateState(long id, int state);
 
     int createForm(AddDropFormModel form) throws JsonProcessingException;
 }

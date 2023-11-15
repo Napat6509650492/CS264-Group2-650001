@@ -49,8 +49,9 @@ public class JdbcAddDropRepository implements AddDropRepository {
         }
     }
     @Override
-    public int updateState(int state){
-        return 1;
+    public int updateState(long id, int state){
+        String sql = "UPDATE addDropForm SET state = ? WHERE id = ?";
+        return jdbcTemplate.update(sql,state,id);
     }
     @Override
     public int createForm(AddDropFormModel form){
