@@ -8,8 +8,8 @@ import java.util.List;
 public class NormalFormModel {
 
     private Long id;
+    private String topic;
     private Date date;
-    private boolean add;
     private String title;
     private String studentFirstName;
     private String studentLastName;
@@ -30,13 +30,13 @@ public class NormalFormModel {
     private int state;
     private MessageModel message;
     private List<MultipartFile> files;
-
     public NormalFormModel() {
     }
-    public NormalFormModel(Long id, Date date, boolean add, String title, String studentFirstName, String studentLastName, String studentId, String studentYear, String studyField, String advisor, String addressNumber, String moo, String tumbol, String amphur, String province, String postalCode, String mobilePhone, String phone, String cause, String objective, int state, MessageModel message, List<MultipartFile> files) {
+
+    public NormalFormModel(Long id, String topic, Date date, String title, String studentFirstName, String studentLastName, String studentId, String studentYear, String studyField, String advisor, String addressNumber, String moo, String tumbol, String amphur, String province, String postalCode, String mobilePhone, String phone, String cause, String objective, int state, MessageModel message, List<MultipartFile> files) {
         this.id = id;
+        this.topic = topic;
         this.date = date;
-        this.add = add;
         this.title = title;
         this.studentFirstName = studentFirstName;
         this.studentLastName = studentLastName;
@@ -67,20 +67,20 @@ public class NormalFormModel {
         this.id = id;
     }
 
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
+
     public Date getDate() {
         return date;
     }
 
     public void setDate(Date date) {
         this.date = date;
-    }
-
-    public boolean isAdd() {
-        return add;
-    }
-
-    public void setAdd(boolean add) {
-        this.add = add;
     }
 
     public String getTitle() {
