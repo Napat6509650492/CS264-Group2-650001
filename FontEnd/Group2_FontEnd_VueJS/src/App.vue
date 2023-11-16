@@ -2,14 +2,6 @@
 import { watchEffect } from 'vue';
 import { userInfoStore } from './stores/userinfo';
 
-function getCookie(name) {
-  let matches = document.cookie.match(new RegExp(
-    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-  ));
-  return matches ? decodeURIComponent(matches[1]) : undefined;
-}
-
-
 const info = userInfoStore();
 
 watchEffect(()=>{
@@ -24,6 +16,7 @@ watchEffect(()=>{
         if(response.status == 200){
           response.json()
           .then((result)=>{
+            console.log(result);
             info.set(result)
             info.login()
           })

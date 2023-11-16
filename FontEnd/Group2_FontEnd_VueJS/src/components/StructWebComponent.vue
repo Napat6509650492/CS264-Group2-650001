@@ -1,10 +1,12 @@
 <script setup>
    import { userInfoStore } from '../stores/userinfo';
    import { ref } from 'vue';
+   import { useRouter } from 'vue-router';
 
    const userinfo = userInfoStore();
-   const barsideActive = ref(true);
-   const logout = ref(false)
+   const barsideActive = ref(false);
+   const logout = ref(false);
+   const router = useRouter();
 
    function logout_user(event) {
       document.cookie = 'cookie' + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
@@ -102,6 +104,7 @@
    margin: 0 auto;
    background-color: #dc2626;
    border-top: 0.5px solid black;
+   z-index: 99;
 }
 
 @media (max-width: 760px) {
@@ -136,6 +139,7 @@ header {
    position: fixed;
    width: 100%;
    top: 0;
+   z-index: 10;
 }
 
 .container-logo {

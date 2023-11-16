@@ -1,10 +1,15 @@
 <script setup>
 import { ref, watch } from 'vue';
+import Pass from '../../components/pass.vue'
+
+const isPopupVisible = ref(false)
+var date = new Date()
 
 
 const formdata = ref({
    "topic": '',
-   "to": '',
+   "too": '',
+   "date": `${date.getFullYear()}-${date.getMonth()}-${date.getDay()}`,
    "title": '',
    "studentFirstName": '',
    "studentLastName": '',
@@ -25,7 +30,6 @@ const formdata = ref({
    "cause": '',
    "files": []
 })
-
 
 
 watch(formdata, async (newdata,olddata)=>{
@@ -63,9 +67,19 @@ function submitf(){
       
    };
 
-   fetch("http://localhost:8080/test/gf", requestOptions)
-      .then(response => response.text())
-      .then(result => console.log(result))
+   fetch("http://localhost:8080/api/normal/create", requestOptions)
+      .then(response => {
+         if (response.status == 200) {
+            response.text()
+               .then((result) => {
+                  console.log(result);
+                  isPopupVisible.value = !isPopupVisible.value;
+                  console.log(isPopupVisible.value);
+               })
+         } else {
+            console.log(error);
+         }
+      })
       .catch(error => console.log('error', error));
 }
 
@@ -73,6 +87,7 @@ function submitf(){
 
 <template>
       <div class="main">
+         <Pass  :class="{ 'pass': true, 'popup-visible': isPopupVisible }"></Pass>
          <div class="head-1">คำร้องทั่วไป</div>
          <div class="head-2">คณะวิทยาศาสตร์และเทคโนโลยี มหาวิทยาลัยธรรมศาสตร์ ศูนย์รังสิต</div>
 
@@ -85,8 +100,8 @@ function submitf(){
             </div>
             <div > 
                   <div >
-                     <label for="เรียน" v-bind:class="{error:formdata.to.length > 100 || /\d/.test(formdata.to)}" class="required">เรียน</label>
-                     <input type="text" id="เรียน" name="เรียน" v-model="formdata.to" v-bind:class="{error:formdata.to.length > 100 || /\d/.test(formdata.to)}" placeholder="เรียน" required>
+                     <label for="เรียน" v-bind:class="{error:formdata.too.length > 100 || /\d/.test(formdata.too)}" class="required">เรียน</label>
+                     <input type="text" id="เรียน" name="เรียน" v-model="formdata.too" v-bind:class="{error:formdata.too.length > 100 || /\d/.test(formdata.too)}" placeholder="เรียน" required>
                   </div>
             </div>
             <p>ข้อมูลลส่วนตัว</p>
@@ -157,7 +172,7 @@ function submitf(){
                   <div class="input-row">
                      <div>
                         <label for="house-number" v-bind:class="{error:formdata.addressNumber.length > 10}" class="required">บ้านเลขที่</label>
-                        <input type="text" id="house-number" name="house-number" placeholder="บ้านเลขที่" v-model="formdata.addressNumber" v-bind:class="{error:formdata.addressNumber.length > 10}" pattern="[0-9]" required>
+                        <input type="text" id="house-number" name="house-number" placeholder="บ้านเลขที่" v-model="formdata.addressNumber" v-bind:class="{error:formdata.addressNumber.length > 10}" required>
                      </div>
                      <div>
                         <label for="village" v-bind:class="{error:formdata.moo.length > 10}" class="required">หมู่</label>
@@ -189,11 +204,11 @@ function submitf(){
                   <div class="input-row">
                      <div>
                         <label for="mobilePhone" v-bind:class="{error:formdata.mobilePhone.length > 10}" class="required">เบอร์โทรศัพท์</label>
-                        <input type="text" id="mobilePhone" name="mobilePhone" placeholder="เบอร์โทรศัพท์" v-model="formdata.mobilePhone" v-bind:class="{error:formdata.mobilePhone.length > 10}" pattern="[0-9]" maxlength="10" minlength="9" required>
+                        <input type="text" id="mobilePhone" name="mobilePhone" placeholder="เบอร์โทรศัพท์" v-model="formdata.mobilePhone" v-bind:class="{error:formdata.mobilePhone.length > 10}" pattern="[0-9]{10}" maxlength="10" minlength="9" required>
                      </div>
                      <div>
                         <label for="phone" v-bind:class="{error:formdata.phone.length > 10}" class="required">เบอร์โทรศัพท์บ้าน</label>
-                        <input type="text" id="phone" name="phone" placeholder="เบอร์โทรศัพท์บ้าน" v-model="formdata.phone" v-bind:class="{error:formdata.phone.length > 10 }" pattern="[0-9]" maxlength="10" minlength="9" required>
+                        <input type="text" id="phone" name="phone" placeholder="เบอร์โทรศัพท์บ้าน" v-model="formdata.phone" v-bind:class="{error:formdata.phone.length > 10 }" pattern="[0-9]{10}" maxlength="10" minlength="0">
                      </div>
                   </div>
             
@@ -241,6 +256,25 @@ function submitf(){
 </template>
 
 <style scoped>
+.pass{
+   position: absolute;
+   left: 50%;
+   top: 50%;
+   transform: translate(-50%, -50%);
+   border: 1px solid #ddd;
+   background-color: white;
+   padding: 20px;
+   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+   transform: translate(-50%, -50%);
+   transition: opacity 0.5s, transform 0.5s; /* Transition สำหรับค่า opacity และ transform */
+   opacity: 0; /* เริ่มต้นป๊อปอัพจะโปร่งใส */
+   visibility: hidden; /* ซ่อนป๊อปอัพเมื่อเริ่มต้น */
+}
+
+.popup-visible {
+  opacity: 1; /* ทำให้ป๊อปอัพเป็นทึบ */
+  visibility: visible; /* แสดงป๊อปอัพ */
+}
    .requ::after{
       content: "*";
       color: red;
@@ -254,6 +288,7 @@ function submitf(){
       width: 50%;
    }
    .main{
+      position: relative;
       min-width: 811px;
       max-width: 1200px;
       border: 2px solid black;

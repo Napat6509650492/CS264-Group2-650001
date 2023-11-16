@@ -1,10 +1,13 @@
 <script setup>
 import { ref, watch } from 'vue';
+import Pass from '../../components/pass.vue'
+var date = new Date()
+const isPopupVisible = ref(false)
 
 const formdata = ref({
    "topic": '',
-   "date":'2023-12-23',
-   "to": '',
+   "date": `${date.getFullYear()}-${date.getMonth()}-${date.getDay()}`,
+   "too": '',
    "addordrop":'',
    "title": '',
    "studentFirstName": '',
@@ -25,16 +28,24 @@ const formdata = ref({
    "addordrop":"add",
    "files": [],
    "subject": {
-      "subjectCode":"132",
-      "subjectName":"456",
-      "subjectSection":"897",
-      "subjectDate":"465",
-      "subjectCredit":0,
-      "subjectTeacher":"123"
+      "subjectCode":"",
+      "subjectName":"",
+      "subjectSection":"",
+      "subjectDate":"",
+      "subjectCredit":null,
+      "subjectTeacher":""
    }
 })
 
 function handleFileUpload(e) {
+   let files = e.target.files;
+   for (let i = 0; i < files.length; i++) {
+      const element = files.item(i);
+      if(element.size > 102400){
+         return;
+      }
+      
+   }
    formdata.value.files = e.target.files
    console.log(formdata.value.files[0].name);
 }
@@ -63,7 +74,7 @@ function submitf() {
    });
 
    for (let [key, value] of data) {
-      console.log(`${value}`);
+      console.log(key + `${value}`);
    }
 
    var requestOptions = {
@@ -75,15 +86,58 @@ function submitf() {
    };
 
    fetch("http://localhost:8080/api/adddrop/create", requestOptions)
-      .then(response => response.text())
-      .then(result => console.log(result))
+      .then(response => {
+         if(response.status == 200){
+            response.text()
+               .then((result) => {
+                  isPopupVisible.value = !isPopupVisible.value;
+                  formdata.value = {
+                     "topic": '',
+                     "date": `${date.getFullYear()}-${date.getMonth()}-${date.getDay()}`,
+                     "too": '',
+                     "addordrop": '',
+                     "title": '',
+                     "studentFirstName": '',
+                     "studentLastName": '',
+                     "studentId": '',
+                     "studentYear": '',
+                     "studyField": '',
+                     "advisor": '',
+                     "addressNumber": '',
+                     "moo": '',
+                     "tumbol": '',
+                     "amphur": '',
+                     "province": '',
+                     "postalCode": '',
+                     "mobilePhone": '',
+                     "phone": '',
+                     "cause": '',
+                     "addordrop": "add",
+                     "files": [],
+                     "subject": {
+                        "subjectCode": "",
+                        "subjectName": "",
+                        "subjectSection": "",
+                        "subjectDate": "",
+                        "subjectCredit": 0,
+                        "subjectTeacher": ""
+                     }
+                  }
+                  
+               })
+         }else{
+            console.log(error);
+         }
+      })
+      
       .catch(error => console.log('error', error));
 }
 
 </script>
 
 <template>
-      <div class="main">
+   <div class="main">
+         <Pass @click="isPopupVisible = !isPopupVisible"  :class="{'pass': true,'popup-visible': isPopupVisible }"></Pass>
          <div class="head-1">คำร้อง เพิ่ม/ถอน</div>
          <div class="head-2">คณะวิทยาศาสตร์และเทคโนโลยี มหาวิทยาลัยธรรมศาสตร์ ศูนย์รังสิต</div>
          <form @submit.prevent="submitf">
@@ -96,8 +150,8 @@ function submitf() {
       
             <div > 
                   <div >
-                     <label for="เรียน" v-bind:class="{error:formdata.to.length > 100 || /\d/.test(formdata.to)}" class="required">เรียน</label>
-                     <input type="text" id="เรียน" name="เรียน" v-model="formdata.to" v-bind:class="{error:formdata.to.length > 100 || /\d/.test(formdata.to)}" placeholder="เรียน" required>
+                     <label for="เรียน" v-bind:class="{error:formdata.too.length > 100 || /\d/.test(formdata.too)}" class="required">เรียน</label>
+                     <input type="text" id="เรียน" name="เรียน" v-model="formdata.too" v-bind:class="{error:formdata.too.length > 100 || /\d/.test(formdata.too)}" placeholder="เรียน" required>
                   </div>
             </div>            
             <p>ข้อมูลลส่วนตัว</p>
@@ -168,7 +222,7 @@ function submitf() {
                   <div class="input-row">
                      <div>
                         <label for="house-number" v-bind:class="{error:formdata.addressNumber.length > 10}" class="required">บ้านเลขที่</label>
-                        <input type="text" id="house-number" name="house-number" placeholder="บ้านเลขที่" v-model="formdata.addressNumber" v-bind:class="{error:formdata.addressNumber.length > 10}" pattern="[0-9]" required>
+                        <input type="text" id="house-number" name="house-number" placeholder="บ้านเลขที่" v-model="formdata.addressNumber" v-bind:class="{error:formdata.addressNumber.length > 10}" required>
                      </div>
                      <div>
                         <label for="village" v-bind:class="{error:formdata.moo.length > 10}" class="required">หมู่</label>
@@ -201,11 +255,11 @@ function submitf() {
                   <div class="input-row">
                      <div>
                         <label for="mobilePhone" v-bind:class="{error:formdata.mobilePhone.length > 10}" class="required">เบอร์โทรศัพท์</label>
-                        <input type="text" id="mobilePhone" name="mobilePhone" placeholder="เบอร์โทรศัพท์" v-model="formdata.mobilePhone" v-bind:class="{error:formdata.mobilePhone.length > 10}" pattern="[0-9]" maxlength="10" minlength="9" required>
+                        <input type="text" id="mobilePhone" name="mobilePhone" placeholder="เบอร์โทรศัพท์" v-model="formdata.mobilePhone" v-bind:class="{error:formdata.mobilePhone.length > 10}" pattern="[0-9]{10}" maxlength="10" minlength="9" required>
                      </div>
                      <div>
-                        <label for="phone" v-bind:class="{error:formdata.phone.length > 10}" class="required">เบอร์โทรศัพท์บ้าน</label>
-                        <input type="text" id="phone" name="phone" placeholder="เบอร์โทรศัพท์บ้าน" v-model="formdata.phone" v-bind:class="{error:formdata.phone.length > 10 }" pattern="[0-9]" maxlength="10" minlength="9" required>
+                        <label for="phone" v-bind:class="{error:formdata.phone.length > 10}">เบอร์โทรศัพท์บ้าน</label>
+                        <input type="text" id="phone" name="phone" placeholder="เบอร์โทรศัพท์บ้าน" v-model="formdata.phone" v-bind:class="{error:formdata.phone.length > 10 }" pattern="[0-9]{10}" maxlength="10" minlength="0">
                      </div>
                   </div>
             
@@ -217,25 +271,25 @@ function submitf() {
                            <div>
                               <div class="input-container"> 
                                  <div>
-                                    <label for="subjectCode" v-bind:class="{error:formdata.subject.subjectCode.length > 10}" class="required">รหัสวิชา</label>
-                                    <input type="text" id="subjectCode" v-model="formdata.subject.subjectCode" v-bind:class="{error:formdata.subject.subjectCode.length > 10}" placeholder="รหัสวิชา" required>
+                                    <label for="subjectCode"  class="required">รหัสวิชา</label>
+                                    <input type="text" id="subjectCode" v-model="formdata.subject.subjectCode"  placeholder="รหัสวิชา" required>
                                  </div>
 
                                  <div>
-                                    <label for="subjectName" v-bind:class="{error:formdata.subject.subjectName.length > 50 || /\d/.test(formdata.subject.subjectName)}" class="required">ชื่อวิชา</label>
-                                    <input type="text" id="subjectName" v-model="formdata.subject.subjectName" v-bind:class="{error:formdata.subject.subjectName.length > 50 || /\d/.test(formdata.subject.subjectName)}" placeholder="ชื่อวิชา"  required>
+                                    <label for="subjectName"  class="required">ชื่อวิชา</label>
+                                    <input type="text" id="subjectName" v-model="formdata.subject.subjectName"  placeholder="ชื่อวิชา"  required>
                                  </div>
                               </div>
                            
                            <div class="input-container">
                                  <div>
-                                    <label for="Section" v-bind:class="{error:formdata.subject.subjectSection.length > 6}" class="required">Section</label>
-                                    <input type="text" id="Section" v-model="formdata.subject.subjectSection" v-bind:class="{error:formdata.subject.subjectSection.length > 6}" pattern="[0-9]{6}" maxlength="6" minlength="6" placeholder="Section" required>
+                                    <label for="Section"  class="required">Section</label>
+                                    <input type="text" id="Section" v-model="formdata.subject.subjectSection" placeholder="Section" required>
                                  </div>
 
                                  <div>
-                                    <label for="time" v-bind:class="{error:formdata.subject.subjectDate.length > 15 || /\d/.test(formdata.subject.subjectDate)}" class="required">วัน/เวลา</label>
-                                    <input type="text" id="time" v-model="formdata.subject.subjectDate" v-bind:class="{error:formdata.subject.subjectDate.length > 15 || /\d/.test(formdata.subject.subjectDate)}" placeholder="วัน/เวลา" required>
+                                    <label for="time"  class="required">วัน/เวลา</label>
+                                    <input type="text" id="time" v-model="formdata.subject.subjectDate"  placeholder="วัน/เวลา" required>
                                  </div>
                            </div>
 
@@ -246,8 +300,8 @@ function submitf() {
                                  </div>
 
                                  <div>
-                                    <label for="nameteacher" v-bind:class="{error:formdata.subject.subjectTeacher.length > 50 || /\d/.test(formdata.subject.subjectTeacher)}" class="required">ชื่อผู้สอน</label>
-                                    <input type="text" id="nameteacher" v-model="formdata.subject.subjectTeacher" v-bind:class="{error:formdata.subject.subjectTeacher.length > 50 || /\d/.test(formdata.subject.subjectTeacher)}" placeholder="ชื่อผู้สอน" required>
+                                    <label for="nameteacher"  class="required">ชื่อผู้สอน</label>
+                                    <input type="text" id="nameteacher" v-model="formdata.subject.subjectTeacher"  placeholder="ชื่อผู้สอน" required>
                                  </div>
                            </div>
                            </div>
@@ -257,7 +311,7 @@ function submitf() {
                   <textarea id="reason" name="reason"  rows="2" cols="25" v-model="formdata.cause" required></textarea>
             </div>
       
-            <p class="required">แนบเอกสาร</p>
+            <p>แนบเอกสาร</p>
 
                <label for="file-upload" class="custom-file-upload">Upload Files</label>
                <input type="file" id="file-upload" name="files[]" multiple="multiple" accept="*" hidden @change="handleFileUpload">
@@ -273,6 +327,26 @@ function submitf() {
 </template>
 
 <style scoped>
+
+.pass{
+   position: absolute;
+   left: 50%;
+   top: 50%;
+   transform: translate(-50%, -50%);
+   border: 1px solid #ddd;
+   background-color: white;
+   padding: 20px;
+   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+   transform: translate(-50%, -50%);
+   transition: opacity 0.5s, transform 0.5s; /* Transition สำหรับค่า opacity และ transform */
+   opacity: 0; /* เริ่มต้นป๊อปอัพจะโปร่งใส */
+   visibility: hidden; /* ซ่อนป๊อปอัพเมื่อเริ่มต้น */
+}
+
+.popup-visible {
+  opacity: 1; /* ทำให้ป๊อปอัพเป็นทึบ */
+  visibility: visible; /* แสดงป๊อปอัพ */
+}
 
 p{
       font-weight: bold;
@@ -311,11 +385,13 @@ p{
       width: 50%;
    }
    .main{
+      position: relative;
       min-width: 811px;
       max-width: 1200px;
       border: 2px solid black;
       padding: 2rem;
       border-radius: 2rem;
+      z-index: 0;
    }
 
    .head-1{

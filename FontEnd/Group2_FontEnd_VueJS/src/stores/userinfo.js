@@ -8,7 +8,7 @@ export const userInfoStore = defineStore('info', {
       "username": "",
       "tu_status": "",
       "statusid": "",
-      "displayname_th": "นภัส ไถ้บ้านกวย",
+      "displayname_th": "",
       "displayname_en": "",
       "email": "",
       "department": "",
