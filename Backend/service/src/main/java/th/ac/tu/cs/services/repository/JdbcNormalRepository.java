@@ -5,12 +5,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 import th.ac.tu.cs.services.model.Form.MessageModel;
 import th.ac.tu.cs.services.model.Form.NormalFormModel;
 
+import java.io.IOException;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 @Repository
@@ -55,40 +61,64 @@ public class JdbcNormalRepository implements NormalRepository{
 
     @Override
     public int createForm(NormalFormModel form) throws JsonProcessingException {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
         String sql = "INSERT INTO addDropForm (topic ,date, too, title, studentFirstName, " +
                 "studentLastName, studentId, studentYear, studyField, advisor, addressNumber, moo, " +
                 "tumbol, amphur, province, postalCode, mobilePhone, phone, objective, cause , state, message) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
         try {
-            jdbcTemplate.update(sql,
-                    form.getTopic(),
-                    form.getDate(),
-                    form.getToo(),
-                    form.getTitle(),
-                    form.getStudentFirstName(),
-                    form.getStudentLastName(),
-                    form.getStudentId(),
-                    form.getStudentYear(),
-                    form.getStudyField(),
-                    form.getAdvisor(),
-                    form.getAddressNumber(),
-                    form.getMoo(),
-                    form.getTumbol(),
-                    form.getAmphur(),
-                    form.getProvince(),
-                    form.getPostalCode(),
-                    form.getMobilePhone(),
-                    form.getPhone(),
-                    form.getObjective(),
-                    form.getCause(),
-                    1,
-                    mapper.writeValueAsString(new MessageModel())
+            jdbcTemplate.update(
+                    connection -> {
+                        PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                        ps.setString(1, form.getTopic());
+                        ps.setDate(2, new java.sql.Date(form.getDate().getTime()));
+                        ps.setString(3, form.getToo());
+                        ps.setString(4, form.getTitle());
+                        ps.setString(5, form.getStudentFirstName());
+                        ps.setString(6, form.getStudentLastName());
+                        ps.setString(7, form.getStudentId());
+                        ps.setString(8, form.getStudentYear());
+                        ps.setString(9, form.getStudyField());
+                        ps.setString(10, form.getAdvisor());
+                        ps.setString(11, form.getAddressNumber());
+                        ps.setString(12, form.getMoo());
+                        ps.setString(13, form.getTumbol());
+                        ps.setString(14, form.getAmphur());
+                        ps.setString(15, form.getProvince());
+                        ps.setString(16, form.getPostalCode());
+                        ps.setString(17, form.getMobilePhone());
+                        ps.setString(18, form.getPhone());
+                        ps.setString(19, form.getObjective());
+                        ps.setString(20, form.getCause());
+                        ps.setInt(21, 1); // Assuming this is an integer
+                        try {
+                            ps.setString(22, mapper.writeValueAsString(new MessageModel()));
+                        } catch (JsonProcessingException e) {
+                            System.out.println("map messgae error");
+                        }
+                        return ps;
+                    },
+                    keyHolder
             );
+            if(form.getFiles() != null){
+                form.getFiles().forEach(item->{
+                    try {
+                        storePdfFile(item,keyHolder.getKey().longValue());
+                    } catch (IOException e) {
+                        System.out.println("Store File Error");
+                    }
+                });
+            }
             return 1;
-        } catch (JsonProcessingException e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             return 0;
         }
+    }
+
+    private void storePdfFile(MultipartFile file , long id) throws IOException {
+        String sql = "INSERT INTO normalFiles (form_id, file_data, file_type, file_size) VALUES (?,?,?,?)";
+        jdbcTemplate.update(sql,id,file.getBytes(),file.getContentType(),file.getSize());
     }
 }
 
