@@ -10,6 +10,7 @@ public class NormalFormModel {
     private Long id;
     private String topic;
     private Date date;
+    private String too;
     private String title;
     private String studentFirstName;
     private String studentLastName;
@@ -33,10 +34,11 @@ public class NormalFormModel {
     public NormalFormModel() {
     }
 
-    public NormalFormModel(Long id, String topic, Date date, String title, String studentFirstName, String studentLastName, String studentId, String studentYear, String studyField, String advisor, String addressNumber, String moo, String tumbol, String amphur, String province, String postalCode, String mobilePhone, String phone, String cause, String objective, int state, MessageModel message, List<MultipartFile> files) {
+    public NormalFormModel(Long id, String topic, Date date, String too, String title, String studentFirstName, String studentLastName, String studentId, String studentYear, String studyField, String advisor, String addressNumber, String moo, String tumbol, String amphur, String province, String postalCode, String mobilePhone, String phone, String cause, String objective, int state, MessageModel message, List<MultipartFile> files) {
         this.id = id;
         this.topic = topic;
         this.date = date;
+        this.too = too;
         this.title = title;
         this.studentFirstName = studentFirstName;
         this.studentLastName = studentLastName;
@@ -57,6 +59,14 @@ public class NormalFormModel {
         this.state = state;
         this.message = message;
         this.files = files;
+    }
+
+    public String getToo() {
+        return too;
+    }
+
+    public void setToo(String too) {
+        this.too = too;
     }
 
     public Long getId() {
