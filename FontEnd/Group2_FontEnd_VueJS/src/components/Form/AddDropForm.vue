@@ -74,7 +74,7 @@ function submitf() {
 
    };
 
-   fetch("http://localhost:8080/api/form/create", requestOptions)
+   fetch("http://localhost:8080/api/adddrop/create", requestOptions)
       .then(response => response.text())
       .then(result => console.log(result))
       .catch(error => console.log('error', error));
