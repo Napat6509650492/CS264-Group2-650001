@@ -1,21 +1,26 @@
 package th.ac.tu.cs.services.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import th.ac.tu.cs.services.model.Form.AddDropFormModel;
+import th.ac.tu.cs.services.model.Form.SubjectModel;
 import th.ac.tu.cs.services.repository.JdbcAddDropRepository;
 
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 @RestController
 @RequestMapping("/api/adddrop")
 public class AddDropController {
+    private final ObjectMapper mapper = new ObjectMapper();
     @Autowired
     private JdbcAddDropRepository jdbcAddDropForm; // สมมติว่าคุณมี service ที่เรียกใช้งานตามข้างล่าง
 
-    @PostMapping
-    public ResponseEntity<?> createForm(@RequestBody AddDropFormModel form) {
+    @PostMapping("create")
+    public ResponseEntity<?> createForm(@ModelAttribute AddDropFormModel form ,@RequestParam("subject") String subject) {
         try {
+            form.setSubject(mapper.readValue(subject, SubjectModel.class));
             int result = jdbcAddDropForm.createForm(form);
             if (result == 1) {
                 return ResponseEntity.ok("Form created successfully.");
@@ -69,5 +74,10 @@ public class AddDropController {
         } else {
             return ResponseEntity.badRequest().body("Error deleting form.");
         }
+    }
+
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.setDisallowedFields("subject"); // fields ที่ไม่อนุญาต
     }
 }
