@@ -3,7 +3,9 @@ import { ref, watch } from 'vue';
 
 const formdata = ref({
    "topic": '',
+   "date":'2023-12-23',
    "to": '',
+   "addordrop":'',
    "title": '',
    "studentFirstName": '',
    "studentLastName": '',
@@ -15,7 +17,6 @@ const formdata = ref({
    "moo": '',
    "tumbol": '',
    "amphur": '',
-   "subDistrict": '',
    "province": '',
    "postalCode": '',
    "mobilePhone": '',
@@ -24,12 +25,12 @@ const formdata = ref({
    "addordrop":"add",
    "files": [],
    "subject": {
-      "subjectCode":"",
-      "subjectName":"",
-      "subjectSection":"",
-      "subjectDate":"",
+      "subjectCode":"132",
+      "subjectName":"456",
+      "subjectSection":"897",
+      "subjectDate":"465",
       "subjectCredit":0,
-      "subjectTeacher":""
+      "subjectTeacher":"123"
    }
 })
 
@@ -40,6 +41,7 @@ function handleFileUpload(e) {
 
 watch(formdata, async (newdata, olddata) => {
    console.log(newdata);
+   console.log(JSON.stringify(formdata.value.subject));
 }, {
    deep: true
 })
@@ -52,6 +54,9 @@ function submitf() {
          Array.from(value).forEach(file => {
             data.append('files', file);
          });
+         
+      }else if(key == 'subject'){
+         data.append(key,JSON.stringify(value))
       } else {
          data.append(key, value);
       }
@@ -65,10 +70,11 @@ function submitf() {
       method: 'POST',
       body: data,
       redirect: 'follow',
+      Credential: 'include'
 
    };
 
-   fetch("http://localhost:8080/test/gg", requestOptions)
+   fetch("http://localhost:8080/api/adddrop/create", requestOptions)
       .then(response => response.text())
       .then(result => console.log(result))
       .catch(error => console.log('error', error));
