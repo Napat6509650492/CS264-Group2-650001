@@ -13,7 +13,7 @@ public class AddDropFormModel {
     private boolean add;
     private String title;
     private String topic;
-    private String to;
+    private String too;
     private String addordrop;
     private String studentFirstName;
     private String studentLastName;
@@ -38,13 +38,13 @@ public class AddDropFormModel {
     public AddDropFormModel() {
     }
 
-    public AddDropFormModel(Long id, Date date, boolean add, String title, String topic, String to, String addordrop, String studentFirstName, String studentLastName, String studentId, String studentYear, String studyField, String advisor, String addressNumber, String moo, String tumbol, String amphur, String province, String postalCode, String mobilePhone, String phone, String cause, SubjectModel subject, int state, MessageModel message, List<MultipartFile> files) {
+    public AddDropFormModel(Long id, Date date, boolean add, String title, String topic, String too, String addordrop, String studentFirstName, String studentLastName, String studentId, String studentYear, String studyField, String advisor, String addressNumber, String moo, String tumbol, String amphur, String province, String postalCode, String mobilePhone, String phone, String cause, SubjectModel subject, int state, MessageModel message, List<MultipartFile> files) {
         this.id = id;
         this.date = date;
         this.add = add;
         this.title = title;
         this.topic = topic;
-        this.to = to;
+        this.too = too;
         this.addordrop = addordrop;
         this.studentFirstName = studentFirstName;
         this.studentLastName = studentLastName;
@@ -75,12 +75,12 @@ public class AddDropFormModel {
         this.addordrop = addordrop;
     }
 
-    public String getTo() {
-        return to;
+    public String getToo() {
+        return too;
     }
 
-    public void setTo(String to) {
-        this.to = to;
+    public void setToo(String too) {
+        this.too = too;
     }
 
     public String getTopic() {

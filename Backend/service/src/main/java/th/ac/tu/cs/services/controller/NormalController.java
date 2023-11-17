@@ -20,6 +20,7 @@ public class NormalController {
     @PostMapping("create")
     public ResponseEntity<?> createForm(@ModelAttribute NormalFormModel form) {
         try {
+            System.out.println(form.getObjective());
             int result = jdbcNormalRepository.createForm(form);
             if (result == 1) {
                 return ResponseEntity.ok("Form created successfully.");

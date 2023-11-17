@@ -15,7 +15,7 @@ import th.ac.tu.cs.services.model.Login.UserPassword;
 
 import java.util.Base64;
 
-@CrossOrigin(origins = "http://localhost:5173/", allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 @RestController
 @RequestMapping("/api/auth")
 public class Login {
@@ -114,7 +114,7 @@ public class Login {
         } catch (Exception e) {
             System.out.println(1316516);
             return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .status(HttpStatus.BAD_REQUEST)
                     .body(new Object() {
                         private final String Message = "EEEEEEEEEEEEEEEE";
 

@@ -104,7 +104,7 @@ function submitf(){
                      <input type="text" id="เรียน" name="เรียน" v-model="formdata.too" v-bind:class="{error:formdata.too.length > 100 || /\d/.test(formdata.too)}" placeholder="เรียน" required>
                   </div>
             </div>
-            <p>ข้อมูลลส่วนตัว</p>
+            <p>ข้อมูลส่วนตัว</p>
             <div class="title">
                   <div >
                      <div style="display: inline;">
@@ -227,7 +227,7 @@ function submitf(){
                               </div>
                               <div>
                                        <input type="radio" id="mfs" name="prasongkor"  value="ผ่อนพันค่าจดทะเบียน" v-model="formdata.objective">
-                                       <label for="mfs" >ขอผ่อนพันค่าจดทะเบียนเรียน</label>
+                                       <label for="mfs" >ขอผ่อนผันค่าจดทะเบียนเรียน</label>
                               </div>
                            </div>
                      </div>

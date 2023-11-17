@@ -154,7 +154,7 @@ function submitf() {
                      <input type="text" id="เรียน" name="เรียน" v-model="formdata.too" v-bind:class="{error:formdata.too.length > 100 || /\d/.test(formdata.too)}" placeholder="เรียน" required>
                   </div>
             </div>            
-            <p>ข้อมูลลส่วนตัว</p>
+            <p>ข้อมูลส่วนตัว</p>
             <div class="title">
                   <div >
                      <div style="display: inline;">

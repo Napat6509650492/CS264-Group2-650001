@@ -62,10 +62,10 @@ public class JdbcNormalRepository implements NormalRepository{
     @Override
     public int createForm(NormalFormModel form) throws JsonProcessingException {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        String sql = "INSERT INTO addDropForm (topic ,date, too, title, studentFirstName, " +
+        String sql = "INSERT INTO normalForm (topic ,date, too, title, studentFirstName, " +
                 "studentLastName, studentId, studentYear, studyField, advisor, addressNumber, moo, " +
                 "tumbol, amphur, province, postalCode, mobilePhone, phone, objective, cause , state, message) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             jdbcTemplate.update(
                     connection -> {
@@ -117,8 +117,8 @@ public class JdbcNormalRepository implements NormalRepository{
     }
 
     private void storePdfFile(MultipartFile file , long id) throws IOException {
-        String sql = "INSERT INTO normalFiles (form_id, file_data, file_type, file_size) VALUES (?,?,?,?)";
-        jdbcTemplate.update(sql,id,file.getBytes(),file.getContentType(),file.getSize());
+        String sql = "INSERT INTO normalFiles (form_id, file_data,file_name ,file_type, file_size) VALUES (?,?,?,?,?)";
+        jdbcTemplate.update(sql,id,file.getBytes(),file.getOriginalFilename(),file.getContentType(),file.getSize());
     }
 }
 

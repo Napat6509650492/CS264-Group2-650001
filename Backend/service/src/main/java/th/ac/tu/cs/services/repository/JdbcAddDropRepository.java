@@ -73,7 +73,7 @@ public class JdbcAddDropRepository implements AddDropRepository {
                         PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                         ps.setString(1, form.getTopic());
                         ps.setDate(2, new java.sql.Date(form.getDate().getTime()));
-                        ps.setString(3, form.getTo());
+                        ps.setString(3, form.getToo());
                         ps.setString(4, form.getAddordrop());
                         ps.setString(5, form.getTitle());
                         ps.setString(6, form.getStudentFirstName());
@@ -123,8 +123,8 @@ public class JdbcAddDropRepository implements AddDropRepository {
     }
 
     private void storePdfFile(MultipartFile file , long id) throws IOException {
-        String sql = "INSERT INTO addDropFiles (form_id, file_data, file_type, file_size) VALUES (?,?,?,?)";
-        jdbcTemplate.update(sql,id,file.getBytes(),file.getContentType(),file.getSize());
+        String sql = "INSERT INTO addDropFiles (form_id, file_data, file_name,file_type, file_size) VALUES (?,?,?,?,?)";
+        jdbcTemplate.update(sql,id,file.getBytes(),file.getOriginalFilename(),file.getContentType(),file.getSize());
     }
 }
 
@@ -136,6 +136,7 @@ class AddDropFormRowMapper implements RowMapper<AddDropFormModel> {
         form.setId(rs.getLong("id"));
         form.setDate(rs.getDate("date")); // ต้องแปลง Date ถ้ามีรูปแบบพิเศษ
         form.setAdd(rs.getBoolean("addordrop"));
+        form.setToo(rs.getString("too"));
         form.setTitle(rs.getString("title"));
         form.setStudentFirstName(rs.getString("studentFirstName"));
         form.setStudentLastName(rs.getString("studentLastName"));

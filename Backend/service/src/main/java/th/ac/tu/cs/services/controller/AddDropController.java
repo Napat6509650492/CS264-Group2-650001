@@ -20,6 +20,8 @@ public class AddDropController {
     @PostMapping("create")
     public ResponseEntity<?> createForm(@ModelAttribute AddDropFormModel form ,@RequestParam("subject") String subject) {
         try {
+            System.out.println(form.getToo());
+            System.out.println(form.getPhone());
             form.setSubject(mapper.readValue(subject, SubjectModel.class));
             int result = jdbcAddDropForm.createForm(form);
             if (result == 1) {

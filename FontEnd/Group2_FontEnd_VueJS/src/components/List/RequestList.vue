@@ -1,7 +1,9 @@
 <script setup>
 import { ref, watchEffect } from 'vue';
 import Confirmcancel from '../confirmcancel.vue'
+import { userInfoStore } from '../../stores/userinfo';
 
+const info = userInfoStore();
 const addDrop = ref({})
 const normal = ref({})
 const select = ref(-1)
@@ -15,7 +17,7 @@ watchEffect(()=>{
         credential: 'include'
     };
 
-    fetch("http://localhost:8080/api/adddrop/student/6509650492", requestOptions)
+    fetch(`http://localhost:8080/api/adddrop/student/${info.getInfo.username}`, requestOptions)
         .then(response => response.json())
         .then(result => {
             addDrop.value = result
@@ -24,7 +26,7 @@ watchEffect(()=>{
         })
         .catch(error => console.log('error', error));
 
-    fetch("http://localhost:8080/api/normal/student/6509650492", requestOptions)
+    fetch(`http://localhost:8080/api/normal/student/${info.getInfo.username}`, requestOptions)
         .then(response => response.json())
         .then(result => {
             normal.value = result
