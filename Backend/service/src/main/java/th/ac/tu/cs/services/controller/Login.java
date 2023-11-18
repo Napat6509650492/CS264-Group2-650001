@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import th.ac.tu.cs.services.model.Login.UserPassword;
 
+import java.util.Arrays;
 import java.util.Base64;
 
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
@@ -124,5 +126,16 @@ public class Login {
                     });
         }
         return null;
+    }
+
+    @GetMapping("/logout")
+    public HttpServletResponse deleteHttpOnlyCookie(HttpServletRequest request,HttpServletResponse response) {
+        System.out.println(Arrays.toString(request.getCookies()));
+        Cookie cookie = new Cookie("cookie", null);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(0); // ตั้งค่าให้หมดอายุทันที
+        response.addCookie(cookie);
+        return response;
     }
 }

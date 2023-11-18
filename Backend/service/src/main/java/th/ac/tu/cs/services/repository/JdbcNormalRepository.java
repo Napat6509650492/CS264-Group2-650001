@@ -39,6 +39,8 @@ public class JdbcNormalRepository implements NormalRepository{
     @Override
     public int deleteFormById(long id) {
         String sql = "DELETE FROM normalForm WHERE id = ?";
+        String sqldeletefiles = "DELETE FROM normalFiles WHERE form_id = ?";
+        jdbcTemplate.update(sqldeletefiles,id);
         return jdbcTemplate.update(sql,id);
     }
 

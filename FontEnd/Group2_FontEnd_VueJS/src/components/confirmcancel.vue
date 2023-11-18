@@ -1,11 +1,11 @@
 <script setup>
 const props = defineProps({
    type: String,
-   id: String,
+   id: Number,
    popcon: Boolean
 })
 
-const deleteForm = () => {
+const deleteForm = (emit) => {
    var requestOptions = {
       method: 'DELETE',
       redirect: 'follow',
@@ -14,8 +14,8 @@ const deleteForm = () => {
 
    fetch(`http://localhost:8080/api/${props.type}/${props.id}`, requestOptions)
       .then(response => response.text())
-      .then(result => alert(result))
-      .catch(error => console.log('error', error));
+      .then(result => {alert(result); emit('confirm')})
+      .catch(error => alert(error));
 }
 
 </script>
@@ -26,11 +26,11 @@ const deleteForm = () => {
          <p class="cancel-label" for="cancel" >ต้องการยกเลิกหรือไม่?</p>
          <h3>Form ID : {{ id }}</h3>
          <br>
-         <p2> 
-         <button @click="deleteForm" class="confirm-button" type="submit" value="ยืนยัน">ยืนยัน</button>
+         <div> 
+         <button @click="()=>{deleteForm($emit); $emit('update', !popcon) } " class="confirm-button" type="submit" value="ยืนยัน">ยืนยัน</button>
          <label> &nbsp;&nbsp;&nbsp;</label>
          <button @click="$emit('update',!popcon)" class="cancel-button" type="submit" value="ยกเลิก">ยกเลิก</button>
-         </p2>
+         </div>
       
       </div>
    </div>

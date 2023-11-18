@@ -12,5 +12,9 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  build: {
+    // ระบุโฟลเดอร์สำหรับเก็บไฟล์ build
+    outDir: '../../Backend/service/src/main/resources/static'
   }
 })
