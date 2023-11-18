@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watchEffect } from 'vue';
+import { onMounted, ref, watch, watchEffect } from 'vue';
 import Confirmcancel from '../confirmcancel.vue'
 import { userInfoStore } from '../../stores/userinfo';
 
@@ -10,7 +10,13 @@ const select = ref(-1)
 const type = ref('addrop')
 const popConfirm = ref(false)
 
-watchEffect(()=>{
+
+
+onMounted(()=>{
+    fetchdata()
+})
+
+function fetchdata() {
     var requestOptions = {
         method: 'GET',
         redirect: 'follow',
@@ -33,20 +39,6 @@ watchEffect(()=>{
             console.log(result)
 
         })
-        .catch(error => console.log('error', error));
-
-},[])
-
-const deleteForm = ()=>{
-    var requestOptions = {
-        method: 'DELETE',
-        redirect: 'follow',
-        credential: 'include'
-    };
-
-    fetch(`http://localhost:8080/api/${type}/${id}`, requestOptions)
-        .then(response => response.text())
-        .then(result => alert(result))
         .catch(error => console.log('error', error));
 }
 
@@ -73,7 +65,7 @@ const deleteForm = ()=>{
                 }">ยกเลิก</button></div>
             </div>
         </div>
-        <Confirmcancel :class="{'pass':true,'popup-visible': popConfirm}" :id="select" :type="type" :popcon="popConfirm" @update="popConfirm = $event"></Confirmcancel>
+        <Confirmcancel :class="{'pass':true,'popup-visible': popConfirm}" :id="select" :type="type" :popcon="popConfirm"  @update="($event)=>{ popConfirm = $event}" @confirm="fetchdata"></Confirmcancel>
         <div class="list">
                 <p> คำร้อง เพิ่ม/ถอน </p>
                 <div class="item header">

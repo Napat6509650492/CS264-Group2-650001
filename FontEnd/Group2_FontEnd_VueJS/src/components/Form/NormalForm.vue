@@ -74,10 +74,41 @@ function submitf(){
                .then((result) => {
                   console.log(result);
                   isPopupVisible.value = !isPopupVisible.value;
-                  console.log(isPopupVisible.value);
+                  formdata.value = {
+                     "topic": '',
+                     "date": `${date.getFullYear()}-${date.getMonth()}-${date.getDay()}`,
+                     "too": '',
+                     "addordrop": '',
+                     "title": '',
+                     "studentFirstName": '',
+                     "studentLastName": '',
+                     "studentId": '',
+                     "studentYear": '',
+                     "studyField": '',
+                     "advisor": '',
+                     "addressNumber": '',
+                     "moo": '',
+                     "tumbol": '',
+                     "amphur": '',
+                     "province": '',
+                     "postalCode": '',
+                     "mobilePhone": '',
+                     "phone": '',
+                     "cause": '',
+                     "addordrop": "add",
+                     "files": [],
+                     "subject": {
+                        "subjectCode": "",
+                        "subjectName": "",
+                        "subjectSection": "",
+                        "subjectDate": "",
+                        "subjectCredit": 0,
+                        "subjectTeacher": ""
+                     }
+                  }
                })
          } else {
-            console.log(error);
+            alert('Error something!!')
          }
       })
       .catch(error => console.log('error', error));
@@ -87,7 +118,7 @@ function submitf(){
 
 <template>
       <div class="main">
-         <Pass  :class="{ 'pass': true, 'popup-visible': isPopupVisible }"></Pass>
+         <Pass @click="isPopupVisible = !isPopupVisible" :class="{ 'pass': true, 'popup-visible': isPopupVisible }"></Pass>
          <div class="head-1">คำร้องทั่วไป</div>
          <div class="head-2">คณะวิทยาศาสตร์และเทคโนโลยี มหาวิทยาลัยธรรมศาสตร์ ศูนย์รังสิต</div>
 

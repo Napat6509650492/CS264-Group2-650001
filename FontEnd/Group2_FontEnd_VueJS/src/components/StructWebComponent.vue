@@ -1,4 +1,6 @@
 <script setup>
+   import Cookies from 'js-cookie'
+
    import { userInfoStore } from '../stores/userinfo';
    import { ref } from 'vue';
    import { useRouter } from 'vue-router';
@@ -8,8 +10,19 @@
    const logout = ref(false);
    const router = useRouter();
 
-   function logout_user(event) {
-      document.cookie = 'cookie' + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+   function logout_user() {
+      var requestOptions = {
+      method: 'GET',
+      redirect: 'follow',
+      credentials:'include'
+   };
+
+   fetch("http://localhost:8080/api/auth/logout", requestOptions)
+      .then(response => response.text())
+      .then(result => {
+         router.push({name:'login'})
+      })
+      .catch(error => console.log('error', error));
    }
 </script>
 

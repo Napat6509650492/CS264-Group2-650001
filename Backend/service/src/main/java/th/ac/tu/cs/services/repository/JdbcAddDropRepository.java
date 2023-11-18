@@ -42,6 +42,8 @@ public class JdbcAddDropRepository implements AddDropRepository {
     @Override
     public int deleteFormById(long id) {
         String sql = "DELETE FROM addDropForm WHERE id = ?";
+        String sqldeletefiles = "DELETE FROM addDropFiles WHERE form_id = ?";
+        jdbcTemplate.update(sqldeletefiles,id);
             return jdbcTemplate.update(sql,id);
     }
 

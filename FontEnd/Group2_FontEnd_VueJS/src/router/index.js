@@ -23,9 +23,31 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const info = userInfoStore();
+  
+  
+  
+  if (to.name !== 'login') {
+    var requestOptions = {
+      method: 'GET',
+      redirect: 'follow',
+      credentials: 'include'
+    };
+    
+    fetch("http://localhost:8080/api/auth/checkCookie", requestOptions)
+    .then(response => {
+      if(response.status == 200){
+        response.json()
+        .then(data=>{
+          info.set(data)
+          next();
+        })
+        .catch(err=>{
+          alert('Plase Login');
+          next({ name: 'login' });
+        })
+      }
+    })
 
-  if (to.name !== 'login' && !info.getLogin) {
-    next({ name: 'login' });
   } else {
     next();
   }
