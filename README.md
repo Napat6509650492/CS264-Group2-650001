@@ -1,5 +1,10 @@
 # CS264-Group2-650001
 
+# Database & Create Table
+
+    ให้สร้าง Database ใน SQL server ของตนเอง --->> และแก้ชื่อ Database ใน Spring boot (application.properties)
+    และใช้ คำสั่งสร้าง Table จากไฟล์  DB.sql ใน Floder
+
 # Vue-Js Project (FrontEnd)
 
 **ต้องการ Node Js ในการ Run Project**
